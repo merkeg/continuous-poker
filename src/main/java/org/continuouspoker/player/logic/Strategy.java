@@ -17,30 +17,36 @@ public class Strategy {
       int totalWorth = getTotalWorth(cards);
       List<Player> otherPlayers = getOtherPlayers(table.getPlayers());
 
-      if(getTotalWorth(cards) < 15) { // Wenn kleiner als 10, folden
-         return new Bet().bet(0);
-      }
+      if(table.getRound() == 1) {
+         if(getTotalWorth(cards) < 15) { // Wenn kleiner als 10, folden
+            return new Bet().bet(0);
+         }
 
 
-      if(getPairs(cards) >= 1) { // Wenn Paar, all In
-         return new Bet().bet(p.getStack());
-      }
+         if(getPairs(cards) >= 1) { // Wenn Paar, all In
+            return new Bet().bet(p.getStack());
+         }
 
-      if(totalWorth >= 20 && hasSameSuit(cards)) { // Wenn selber suit und wert >= 20
-         return new Bet().bet(p.getStack());
-      }
+         if(totalWorth >= 20 && hasSameSuit(cards)) { // Wenn selber suit und wert >= 20
+            return new Bet().bet(p.getStack());
+         }
 
-      if(p.getStack() <= 20) { // Chips weniger als 20
-         return new Bet().bet(p.getStack());
-      }
+         if(p.getStack() <= 20) { // Chips weniger als 20
+            return new Bet().bet(p.getStack());
+         }
 
-      if(totalWorth >= 23) { // Total worth >= 23
-         return new Bet().bet(p.getStack());
+         if(totalWorth >= 23) { // Total worth >= 23
+            return new Bet().bet(p.getStack());
+         }
       }
 
       List<Card> deckWithCommunity = joinPairs(cards, table.getCommunityCards());
       int pairsTotal = getPairs(deckWithCommunity);
 
+
+      if(hasTriplets(deckWithCommunity)) {
+         return new Bet().bet(p.getStack());
+      }
 
       if(hasOtherPlayerBetMore(table.getMinimumBet(), otherPlayers)) { // Wenn gegner höher geht
          if(pairsTotal <= 1) {
@@ -54,6 +60,8 @@ public class Strategy {
       } if(pairsTotal > 1) { // mehrere Pairs mit community
          return new Bet().bet(p.getStack());
       }
+
+
       return new Bet().bet(table.getMinimumBet());
 
    }
@@ -85,7 +93,7 @@ public class Strategy {
    public int getPairs(List<Card> cards) {
       int pairs = 0;
       int[] worths = getRanks(cards);
-      for(int i = 0; i < cards.size(); i++) {
+      for(int i = 0; i < 2; i++) {
          for(int j = i+1; j < cards.size(); j++) {
             if(worths[i] == worths[j]) {
                pairs++;
@@ -94,6 +102,24 @@ public class Strategy {
       }
       return pairs;
    }
+
+   public boolean hasTriplets(List<Card> cards) {
+      int[] worths = getRanks(cards);
+
+      for(int i = 0; i < 2; i++) {
+         int sameAmount = 1;
+         for(int j = i+1; j < cards.size(); j++) {
+            if(worths[i] == worths[j]) {
+               sameAmount++;
+            }
+         }
+         if(sameAmount >= 3) {
+            return true;
+         }
+      }
+      return false;
+   }
+
 
    public List<Card> joinPairs(List<Card> cardsA, List<Card> cardsB) {
       List<Card> cards = Stream.concat(cardsA.stream(), cardsB.stream()).collect(Collectors.toList());
