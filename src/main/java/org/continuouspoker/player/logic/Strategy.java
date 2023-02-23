@@ -50,8 +50,10 @@ public class Strategy {
       }
 
       if(hasOtherPlayerBetMore(table.getMinimumBet(), otherPlayers)) { // Wenn gegner höher geht
-         if(pairsTotal <= 1) {
+         if(pairsTotal == 0) {
             return new Bet().bet(0);
+         } else if(pairsTotal == 1) {
+            return new Bet().bet(table.getMinimumBet());
          }
          return new Bet().bet(p.getStack());
       }
@@ -98,6 +100,7 @@ public class Strategy {
          for(int j = i+1; j < cards.size(); j++) {
             if(worths[i] == worths[j]) {
                pairs++;
+               break;
             }
          }
       }
