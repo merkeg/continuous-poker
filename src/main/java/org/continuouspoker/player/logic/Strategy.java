@@ -35,7 +35,9 @@ public class Strategy {
          return new Bet().bet(p.getStack());
       }
 
-      return new Bet().bet(0);
+
+
+      return new Bet().bet(table.getMinimumBet());
 
    }
 
