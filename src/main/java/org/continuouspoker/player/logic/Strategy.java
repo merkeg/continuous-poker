@@ -3,6 +3,8 @@ package org.continuouspoker.player.logic;
 import org.continuouspoker.player.model.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Strategy {
 
@@ -14,7 +16,7 @@ public class Strategy {
       List<Card> cards = p.getCards();
       int totalWorth = getTotalWorth(cards);
 
-      if(getTotalWorth(cards) < 10) { // Wenn kleiner als 10, folden
+      if(getTotalWorth(cards) < 15) { // Wenn kleiner als 10, folden
          return new Bet().bet(0);
       }
 
@@ -35,7 +37,7 @@ public class Strategy {
          return new Bet().bet(p.getStack());
       }
 
-
+//      table.getCommunityCards()
 
       return new Bet().bet(table.getMinimumBet());
 
@@ -67,7 +69,15 @@ public class Strategy {
 
    public boolean hasPair(List<Card> cards) {
       int[] worths = getRanks(cards);
+//      for(int i = 0; i < cards.size(); i++) {
+//         for(int j = i+1; j)
+//      }
       return worths[0] == worths[1];
+   }
+
+   public List<Card> joinPairs(List<Card> cardsA, List<Card> cardsB) {
+      List<Card> cards = Stream.concat(cardsA.stream(), cardsB.stream()).collect(Collectors.toList());
+      return cards;
    }
 
    public int getNumberizedRank(Rank r) {
