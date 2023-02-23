@@ -14,13 +14,13 @@ public class Strategy {
       List<Card> cards = p.getCards();
       int totalWorth = getTotalWorth(cards);
 
-      if(getTotalWorth(cards) > 20) {
+      if(getTotalWorth(cards) >= 24) { // größer als 20
 
          if(hasPair(cards)) {
             return new Bet().bet(p.getStack());
          }
 
-         return new Bet().bet((int) (table.getSmallBlind() * 2.3));
+         return new Bet().bet(p.getStack());
       }
 
       return new Bet().bet(0);
