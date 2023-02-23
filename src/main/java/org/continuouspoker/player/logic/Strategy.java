@@ -21,7 +21,7 @@ public class Strategy {
       }
 
 
-      if(hasPair(cards)) { // Wenn Paar, all In
+      if(getPairs(cards) >= 1) { // Wenn Paar, all In
          return new Bet().bet(p.getStack());
       }
 
@@ -37,7 +37,14 @@ public class Strategy {
          return new Bet().bet(p.getStack());
       }
 
-//      table.getCommunityCards()
+      List<Card> deckWithCommunity = joinPairs(cards, table.getCommunityCards());
+
+      if(getPairs(deckWithCommunity) == 1) {
+         return new Bet().bet(table.getMinimumBet());
+      } if(getPairs(deckWithCommunity) > 1) {
+         return new Bet().bet(p.getStack());
+      }
+
 
       return new Bet().bet(table.getMinimumBet());
 
@@ -67,12 +74,17 @@ public class Strategy {
       return cards.get(0).getSuit() == cards.get(1).getSuit();
    }
 
-   public boolean hasPair(List<Card> cards) {
+   public int getPairs(List<Card> cards) {
+      int pairs = 0;
       int[] worths = getRanks(cards);
-//      for(int i = 0; i < cards.size(); i++) {
-//         for(int j = i+1; j)
-//      }
-      return worths[0] == worths[1];
+      for(int i = 0; i < cards.size(); i++) {
+         for(int j = i+1; j < cards.size(); j++) {
+            if(worths[i] == worths[j]) {
+               pairs++;
+            }
+         }
+      }
+      return pairs;
    }
 
    public List<Card> joinPairs(List<Card> cardsA, List<Card> cardsB) {
