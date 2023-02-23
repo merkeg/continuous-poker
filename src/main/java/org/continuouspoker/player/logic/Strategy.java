@@ -41,19 +41,19 @@ public class Strategy {
       List<Card> deckWithCommunity = joinPairs(cards, table.getCommunityCards());
       int pairsTotal = getPairs(deckWithCommunity);
 
-      if(pairsTotal == 1) {
-         return new Bet().bet(table.getMinimumBet());
-      } if(pairsTotal > 1) {
-         return new Bet().bet(p.getStack());
-      }
 
-      if(hasOtherPlayerBetMore(table.getMinimumBet(), otherPlayers)) {
+      if(hasOtherPlayerBetMore(table.getMinimumBet(), otherPlayers)) { // Wenn gegner höher geht
          if(pairsTotal <= 1) {
             return new Bet().bet(0);
          }
          return new Bet().bet(p.getStack());
       }
 
+      if(pairsTotal == 1) { // 1 pair mit community
+         return new Bet().bet(table.getMinimumBet());
+      } if(pairsTotal > 1) { // mehrere Pairs mit community
+         return new Bet().bet(p.getStack());
+      }
       return new Bet().bet(table.getMinimumBet());
 
    }
