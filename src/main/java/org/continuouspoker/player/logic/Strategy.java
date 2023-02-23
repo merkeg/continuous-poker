@@ -20,7 +20,13 @@ public class Strategy {
             return new Bet().bet(p.getStack());
          }
 
-         return new Bet().bet(0);
+         if(totalWorth > 20 && hasSameSuit(cards)) {
+            return new Bet().bet(p.getStack());
+         }
+
+         if(p.getStack() <= 20) {
+            return new Bet().bet(p.getStack());
+         }
       }
 
       return new Bet().bet(0);
@@ -44,6 +50,10 @@ public class Strategy {
       }
 
       return arr;
+   }
+
+   public boolean hasSameSuit(List<Card> cards) {
+      return cards.get(0).getSuit() == cards.get(1).getSuit();
    }
 
    public boolean hasPair(List<Card> cards) {
