@@ -35,10 +35,10 @@ public class Strategy {
             return new Bet().bet(p.getStack());
          }
 
-         if(totalWorth >= 23) { // Total worth >= 23
+         if(totalWorth >= 26) { // Total worth >= 26
             return new Bet().bet(p.getStack());
          }
-         return new Bet().bet(0);
+         return new Bet().bet(table.getMinimumBet() * 2);
       }
 
       List<Card> deckWithCommunity = joinPairs(cards, table.getCommunityCards());
