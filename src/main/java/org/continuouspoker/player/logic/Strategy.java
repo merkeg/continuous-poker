@@ -17,7 +17,7 @@ public class Strategy {
       int totalWorth = getTotalWorth(cards);
       List<Player> otherPlayers = getOtherPlayers(table.getPlayers());
 
-      if(p.getStack() >= 350) {
+      if(p.getStack() >= 350 && totalWorth >= 18) {
          return new Bet().bet(p.getStack());
       }
 
