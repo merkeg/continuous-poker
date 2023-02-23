@@ -14,22 +14,29 @@ public class Strategy {
       List<Card> cards = p.getCards();
       int totalWorth = getTotalWorth(cards);
 
-      if(getTotalWorth(cards) >= 10) { // größer als 20
+      if(getTotalWorth(cards) < 10) { // Wenn kleiner als 10, folden
+         return new Bet().bet(0);
+      }
 
-         if(hasPair(cards)) {
-            return new Bet().bet(p.getStack());
-         }
 
-         if(totalWorth > 20 && hasSameSuit(cards)) {
-            return new Bet().bet(p.getStack());
-         }
+      if(hasPair(cards)) { // Wenn Paar, all In
+         return new Bet().bet(p.getStack());
+      }
 
-         if(p.getStack() <= 20) {
-            return new Bet().bet(p.getStack());
-         }
+      if(totalWorth >= 20 && hasSameSuit(cards)) { // Wenn selber suit und wert >= 20
+         return new Bet().bet(p.getStack());
+      }
+
+      if(p.getStack() <= 20) { // Chips weniger als 20
+         return new Bet().bet(p.getStack());
+      }
+
+      if(totalWorth >= 23) { // Total worth >= 23
+         return new Bet().bet(p.getStack());
       }
 
       return new Bet().bet(0);
+
    }
 
 
