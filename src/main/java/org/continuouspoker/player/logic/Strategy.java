@@ -49,27 +49,33 @@ public class Strategy {
       int pairsTotal = getPairs(deckWithCommunity);
 
 
-      if(hasTriplets(deckWithCommunity)) {
-         return new Bet().bet(p.getStack());
-      }
-
-      if(hasOtherPlayerBetMore(table.getMinimumBet(), otherPlayers)) { // Wenn gegner höher geht
-         if(pairsTotal == 0) {
-            return new Bet().bet(0);
-         } else if(pairsTotal == 1) {
-            return new Bet().bet(table.getMinimumBet());
+      if(table.getRound() == 1) {
+         if(hasTriplets(deckWithCommunity)) {
+            return new Bet().bet(p.getStack());
          }
-         return new Bet().bet(p.getStack());
-      }
 
-      if(pairsTotal == 1) { // 1 pair mit community
+         if(hasOtherPlayerBetMore(table.getMinimumBet(), otherPlayers)) { // Wenn gegner höher geht
+            if(pairsTotal == 0) {
+               return new Bet().bet(0);
+            } else if(pairsTotal == 1) {
+               return new Bet().bet(table.getMinimumBet());
+            }
+            return new Bet().bet(p.getStack());
+         }
+
+         if(pairsTotal == 1) { // 1 pair mit community
+            return new Bet().bet(table.getMinimumBet());
+         } if(pairsTotal > 1) { // mehrere Pairs mit community
+            return new Bet().bet(p.getStack());
+         }
          return new Bet().bet(table.getMinimumBet());
-      } if(pairsTotal > 1) { // mehrere Pairs mit community
-         return new Bet().bet(p.getStack());
       }
 
 
-      return new Bet().bet(table.getMinimumBet());
+
+
+
+      return new Bet().bet(p.getStack());
 
    }
 
