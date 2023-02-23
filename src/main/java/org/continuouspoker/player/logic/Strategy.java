@@ -15,6 +15,7 @@ public class Strategy {
       Player p = table.getPlayers().get(table.getActivePlayer());
       List<Card> cards = p.getCards();
       int totalWorth = getTotalWorth(cards);
+      List<Player> otherPlayers = getOtherPlayers(table.getPlayers());
 
       if(getTotalWorth(cards) < 15) { // Wenn kleiner als 10, folden
          return new Bet().bet(0);
@@ -38,13 +39,20 @@ public class Strategy {
       }
 
       List<Card> deckWithCommunity = joinPairs(cards, table.getCommunityCards());
+      int pairsTotal = getPairs(deckWithCommunity);
 
-      if(getPairs(deckWithCommunity) == 1) {
+      if(pairsTotal == 1) {
          return new Bet().bet(table.getMinimumBet());
-      } if(getPairs(deckWithCommunity) > 1) {
+      } if(pairsTotal > 1) {
          return new Bet().bet(p.getStack());
       }
 
+      if(hasOtherPlayerBetMore(table.getMinimumBet(), otherPlayers)) {
+         if(pairsTotal <= 1) {
+            return new Bet().bet(0);
+         }
+         return new Bet().bet(p.getStack());
+      }
 
       return new Bet().bet(table.getMinimumBet());
 
@@ -90,6 +98,19 @@ public class Strategy {
    public List<Card> joinPairs(List<Card> cardsA, List<Card> cardsB) {
       List<Card> cards = Stream.concat(cardsA.stream(), cardsB.stream()).collect(Collectors.toList());
       return cards;
+   }
+
+   public List<Player> getOtherPlayers(List<Player> players) {
+      return players.stream().filter( p -> !p.getName().equals(TEAMNAME)).collect(Collectors.toList());
+   }
+
+   public boolean hasOtherPlayerBetMore(int ourBet, List<Player> players) {
+      for(Player other: players) {
+         if(other.getBet() > ourBet){
+            return true;
+         }
+      }
+      return false;
    }
 
    public int getNumberizedRank(Rank r) {
