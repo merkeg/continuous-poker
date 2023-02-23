@@ -119,19 +119,13 @@ public class Strategy {
 
    public boolean hasTriplets(List<Card> cards) {
       int[] worths = getRanks(cards);
-
-      for(int i = 0; i < 2; i++) {
-         int sameAmount = 1;
-         for(int j = i+1; j < cards.size(); j++) {
-            if(worths[i] == worths[j]) {
-               sameAmount++;
-            }
-         }
-         if(sameAmount >= 3) {
-            return true;
+      int sameAmount = 1;
+      for(int j = 1; j < worths.length; j++) {
+         if(worths[0] == worths[j]) {
+            sameAmount++;
          }
       }
-      return false;
+      return sameAmount >= 3;
    }
 
 
