@@ -17,6 +17,10 @@ public class Strategy {
       int totalWorth = getTotalWorth(cards);
       List<Player> otherPlayers = getOtherPlayers(table.getPlayers());
 
+      if(p.getStack() >= 350) {
+         return new Bet().bet(p.getStack());
+      }
+
       if(table.getRound() == 0) {
          if(getTotalWorth(cards) < 15) { // Wenn kleiner als 10, folden
             return new Bet().bet(0);
