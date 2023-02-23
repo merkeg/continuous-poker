@@ -17,7 +17,7 @@ public class Strategy {
       int totalWorth = getTotalWorth(cards);
       List<Player> otherPlayers = getOtherPlayers(table.getPlayers());
 
-      if(table.getRound() == 1) {
+      if(table.getRound() == 0) {
          if(getTotalWorth(cards) < 15) { // Wenn kleiner als 10, folden
             return new Bet().bet(0);
          }
@@ -38,6 +38,7 @@ public class Strategy {
          if(totalWorth >= 23) { // Total worth >= 23
             return new Bet().bet(p.getStack());
          }
+         return new Bet().bet(0);
       }
 
       List<Card> deckWithCommunity = joinPairs(cards, table.getCommunityCards());
